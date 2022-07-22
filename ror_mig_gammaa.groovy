@@ -16,7 +16,22 @@ def PRECOMPILE_ENV = env.PRECOMPILE_ENV
 
 def git_clone() {
    stage name: 'app clone repo', concurrency: 5
-   checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:elarahq/'+GIT_REPO+'.git', credentialsId: 'b5b5b230-4f8a-4213-a6ba-7efccc0ae00c' ]], branches: [[name: TAG]]], poll: false
+   //checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:elarahq/'+GIT_REPO+'.git', credentialsId: 'b5b5b230-4f8a-4213-a6ba-7efccc0ae00c' ]], branches: [[name: TAG]]], poll: false
+   checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:elarahq/'+GIT_REPO+'.git', credentialsId: 'b5b5b230-4f8a-4213-a6ba-7efccc0ae00c' ]], branches: 'master'], poll: false  
+}
+def release_job() {
+  stage name: 'release', concurrency: 5
+   rules:
+    - if: $CI_COMMIT_TAG
+      when: never                                  
+    - if: $CI_COMMIT_BRANCH == 'master'  
+  script:
+    - echo "running release_job for $TAG"
+  release:                                         
+    tag_name: 'v0.$CI_PIPELINE_IID'               
+    description: 'v0.$CI_PIPELINE_IID'
+    ref: '$CI_COMMIT_SHA'
+}
 }
 
 
