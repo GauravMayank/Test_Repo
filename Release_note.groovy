@@ -142,9 +142,10 @@ if [ $CURRENT_BRANCH != "$BRANCH" ]; then
 fi
 
 exit 0
-}
-catch (all) {
-    throw new hudson.AbortException("Some issue with  image update in  git file")
+'''
+    println "++++++++++++++++done++++++++++++++++"
+  } catch (all) {
+    throw new hudson.AbortException("Some issue with build")
   }
 }
 node("dev-mini-housing-jenkins-slave") {
