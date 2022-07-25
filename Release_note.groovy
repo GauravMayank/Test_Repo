@@ -1,6 +1,6 @@
 #!/bin/bash
 ARGUMENTS="$@"
-BRANCH="main"
+BRANCH="master"
 DRYRUN="0"
 GITPARAMS=()
 RELEASEDATE=$(date '+%Y%m%d')
@@ -14,12 +14,12 @@ VERSIONTYPE="patch"
 def git_clone() {
    stage name: 'app clone repo', concurrency: 5
    //checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:elarahq/'+GIT_REPO+'.git', credentialsId: 'b5b5b230-4f8a-4213-a6ba-7efccc0ae00c' ]], branches: [[name: TAG]]], poll: false
-   checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:elarahq/'+GIT_REPO+'.git', credentialsId: '' ]], branches: 'master'], poll: false  
+     checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:GauravMayank/'+GIT_REPO+'.git', credentialsId: 'test_key-git-ssh' ]], branches: '$BRANCH'], poll: false  
 }
-
-REPO_DIR=$(echo $(git rev-parse --show-toplevel))
-
-cd "${REPO_DIR}"
+def release_job() {
+  stage name: 'release', concurrency: 5 
+  REPO_DIR=$(echo $(git rev-parse --show-toplevel))
+  cd "${REPO_DIR}"
 
 # Get current active branch
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -122,3 +122,8 @@ if [ $CURRENT_BRANCH != "$BRANCH" ]; then
 fi
 
 exit 0
+
+node("dev-mini-housing-jenkins-slave") {
+      release_job()
+      }
+      
