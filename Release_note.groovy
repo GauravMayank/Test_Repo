@@ -37,13 +37,12 @@ def release_job() {
 //# Get current active branch
 //CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 //# Switch to production branch
-if ( $CURRENT_BRANCH != "$BRANCH" ); then
+   if ( $CURRENT_BRANCH != "$BRANCH" ) {
     conditional_echo "- Switching from $CURRENT_BRANCH to $BRANCH branch. (stashing any local change)"
     # stash any current work
     git stash "${GITPARAMS[@]}"
     # go to the production branch
     git checkout $BRANCH "${GITPARAMS[@]}"
-fi
 
 conditional_echo "- Updating local $BRANCH branch."
 //# pull latest version of production branch
@@ -135,7 +134,7 @@ if ( $CURRENT_BRANCH != "$BRANCH" ); then
 fi
 
 exit 0
-
+}
 node("dev-mini-housing-jenkins-slave") {
       release_job()
       }
