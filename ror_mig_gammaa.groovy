@@ -26,10 +26,11 @@ def release_job() {
       echo "running release_job for $TAG"
       env.tag_name="v0.$CI_PIPELINE_IID"
       echo "v0.$CI_PIPELINE_IID"
-}
+   }   
    else {
        echo "Worker job is not running"
    }
+}   
 node("dev-mini-housing-jenkins-slave") {
       release_job()
 
