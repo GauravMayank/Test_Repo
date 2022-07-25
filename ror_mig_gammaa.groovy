@@ -29,7 +29,7 @@ def release_job() {
 }
    else {
        echo "Worker job is not running"
-
+   }
 node("dev-mini-housing-jenkins-slave") {
       release_job()
 
