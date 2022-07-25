@@ -39,9 +39,9 @@ def release_job() {
 //# Switch to production branch
    if ( $CURRENT_BRANCH != "$BRANCH" ) {
     conditional_echo "- Switching from $CURRENT_BRANCH to $BRANCH branch. (stashing any local change)"
-    # stash any current work
+    //# stash any current work
     git stash "${GITPARAMS[@]}"
-    # go to the production branch
+    //# go to the production branch
     git checkout $BRANCH "${GITPARAMS[@]}"
 
 conditional_echo "- Updating local $BRANCH branch."
