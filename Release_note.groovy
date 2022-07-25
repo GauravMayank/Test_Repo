@@ -1,5 +1,4 @@
 #!/bin/bash
-ARGUMENTS="$@"
 BRANCH="master"
 DRYRUN="0"
 GITPARAMS=()
