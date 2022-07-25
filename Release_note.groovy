@@ -11,115 +11,14 @@ RUNSILENT="0"
 VERBOSE="0"
 VERSIONTYPE="patch"
 
-
-# Function to return help text when requested with -h option.
-help() {
-    # Display help.
-    echo
-    echo "Generates, increments and pushes an annotated semantic version tag for current git repository."
-    echo
-    echo "Usage:"
-    echo "  sh tag-release [-b|--branch] [-d|--date] [-h|--help] [-m|--message] [-p|--previous] [-r|--remote] [-v|--version-type]"
-    echo
-    echo "Options:"
-    echo "-b,--branch <branch>"
-    echo "      Branch to generate release tag on."
-    echo "      If ommited, defaults to '$BRANCH'"
-    echo
-    echo "-d,--date <date>"
-    echo "      Date string to specify when release was created."
-    echo "      If ommited, defaults to %Y%m%d of current date."
-    echo
-    echo "-h,--help, help"
-    echo "      Prints this help."
-    echo
-    echo "-m,--message <message>"
-    echo "      Message to use to annotate release."
-    echo "      If ommited a list of non-merge commit messages will be compiled as release annotation."
-    echo "      If ommited and -p <commit> is given, will compile a list of non-merge commit messages between <commit> and HEAD."
-    echo "      If ommited and -p is not given, will compile a list of non-merge commit messages between last found release and HEAD."
-    echo
-    echo "-n,--dry-run"
-    echo "      Do everything except actually send the updates."
-    echo "      If -q is also given then only error messages will be output."
-    echo
-    echo "-p,--previous <commit>"
-    echo "      Previous commit to use to generate release notes."
-    echo "      If ommited, will attempt to get commit hash of last release tag."
-    echo
-    echo "-q,--quiet"
-    echo "      Supress all output, unless an error occurs."
-    echo
-    echo "-r,--remote <remote>"
-    echo "      Name of remote to use for pushing."
-    echo "      If ommited, defaults to '$REMOTE'"
-    echo
-    echo "-t,--version-type [major|minor|patch]"
-    echo "      Type of semantic version to create. Valid options are 'major', 'minor' or 'patch'"
-    echo "          major: Will bump up to next major release (i.e 1.0.0 -> 2.0.0)"
-    echo "          minor: Will bump up to next minor release (i.e 1.0.1 -> 1.1.0)"
-    echo "          patch: Will bump up to next patch release (i.e 1.0.2 -> 1.0.3)"
-    echo "      If ommited, will default to '$VERSIONTYPE'"
-    echo
-    echo "-v,--verbose"
-    echo "      Run verbosley."
-    echo
+def git_clone() {
+   stage name: 'app clone repo', concurrency: 5
+   //checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:elarahq/'+GIT_REPO+'.git', credentialsId: 'b5b5b230-4f8a-4213-a6ba-7efccc0ae00c' ]], branches: [[name: TAG]]], poll: false
+   checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:elarahq/'+GIT_REPO+'.git', credentialsId: '' ]], branches: 'master'], poll: false  
 }
 
-conditional_echo() {
-    if [[ "$RUNQUIET" -eq 0 ]]; then
-        echo "$1"
-    fi
-}
-
-while [[ "$#" -gt 0 ]]
-do
-    case $1 in
-      -b|--branch)
-        BRANCH=$2
-        ;;
-      -d|--date)
-        RELEASEDATE=$2
-        ;;
-      -h|--help|help)
-        help
-        exit
-        ;;
-      -m|--message)
-        RELEASENOTES=$2
-        ;;
-      -n|--dry-run)
-        DRYRUN="1"
-        ;;
-      -p|--previous)
-        PREVIOUS_COMMIT=$2
-        ;;
-      -r|--remote)
-        REMOTE=$2
-        ;;
-      -t|--type)
-        VERSIONTYPE=$2
-        ;;
-      -q|--quiet)
-        RUNQUIET="1"
-        GITPARAMS+=(--dry-run)
-        ;;
-      -v|--verbose)
-        # See if a second argument is passed, due to argument reassignment to -v.
-        if [[ "$1" == "-v" ]] && [[ -n "$2" ]]; then
-            echo "ERROR: Unsupported value \"$2\" passed to -v argument. If trying to set semantic version tag, use the -t or --type argument".
-            exit
-        fi
-        VERBOSE="1"
-        GITPARAMS+=(--verbose)
-        ;;
-    esac
-    shift
-done
-
-# Get top-level of git repo.
 REPO_DIR=$(echo $(git rev-parse --show-toplevel))
-# CD into the top level
+
 cd "${REPO_DIR}"
 
 # Get current active branch
