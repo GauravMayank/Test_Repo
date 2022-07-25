@@ -21,17 +21,14 @@ def git_clone() {
 }
 def release_job() {
   stage name: 'release', concurrency: 5
-   rules:
-    - if: $CI_COMMIT_TAG
-      when: never                                  
-    - if: $CI_COMMIT_BRANCH == 'master'  
-  script:
-    - echo "running release_job for $TAG"
-  release:                                         
-    tag_name: 'v0.$CI_PIPELINE_IID'               
-    description: 'v0.$CI_PIPELINE_IID'
-    ref: '$CI_COMMIT_SHA'
+    //ref: '$CI_COMMIT_SHA'
+   if("$CI_COMMIT_TAG" == "master"){
+      echo "running release_job for $TAG"
+      env.tag_name="v0.$CI_PIPELINE_IID"
+      echo "v0.$CI_PIPELINE_IID"
 }
+   else {
+       echo "Worker job is not running"
 
 node("dev-mini-housing-jenkins-slave") {
       release_job()
