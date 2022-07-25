@@ -1,14 +1,28 @@
-#!/bin/bash
-BRANCH="master"
-DRYRUN="0"
-GITPARAMS=()
-RELEASEDATE=$(date '+%Y%m%d')
-RELEASENOTES=""
-REMOTE="origin"
-PREVIOUS_COMMIT=""
-RUNSILENT="0"
-VERBOSE="0"
-VERSIONTYPE="patch"
+#!/usr/bin/env groovy
+import hudson.model.*
+import hudson.EnvVars
+import groovy.json.JsonSlurperClassic
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import java.net.URL
+import groovy.json.JsonSlurper
+import java.text.SimpleDateFormat
+//define var for job
+def BRANCH_NAME = env.BRANCH_NAME
+def TAG = env.tag
+def worker_job = env.worker_job
+def PRECOMPILE_ENV = env.PRECOMPILE_ENV
+//def retry-max-time = env.retry-max-time
+def BRANCH="master"
+def DRYRUN="0"
+def GITPARAMS=()
+def RELEASEDATE=$(date '+%Y%m%d')
+def RELEASENOTES=""
+def REMOTE="origin"
+def PREVIOUS_COMMIT=""
+def RUNSILENT="0"
+def VERBOSE="0"
+def VERSIONTYPE="patch"
 
 def git_clone() {
    stage name: 'app clone repo', concurrency: 5
