@@ -18,8 +18,8 @@ def git_clone() {
 }
 def release_job() {
   stage name: 'release', concurrency: 5 
-  REPO_DIR=$(echo $(git rev-parse --show-toplevel))
-  cd "${REPO_DIR}"
+  //REPO_DIR=$(echo $(git rev-parse --show-toplevel))
+  //cd "${REPO_DIR}"
 
 # Get current active branch
 //CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
