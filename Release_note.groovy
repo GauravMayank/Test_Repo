@@ -17,7 +17,7 @@ def PRECOMPILE_ENV = env.PRECOMPILE_ENV
 def git_clone() {
    stage name: 'app clone repo', concurrency: 5
    //checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:elarahq/'+GIT_REPO+'.git', credentialsId: 'b5b5b230-4f8a-4213-a6ba-7efccc0ae00c' ]], branches: [[name: TAG]]], poll: false
-     checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:GauravMayank/'+GIT_REPO+'.git', credentialsId: 'test_key-git-ssh' ]], branches: '$BRANCH'], poll: false  
+     checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'git@github.com:GauravMayank/'+GIT_REPO+'.git', credentialsId: 'test_key-git-ssh' ]], branches: '$BRANCH_NAME'], poll: false  
 }
 def release_job() {
   stage name: 'release', concurrency: 5 
