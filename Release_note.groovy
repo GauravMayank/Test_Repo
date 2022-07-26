@@ -159,4 +159,4 @@ node("dev-mini-housing-jenkins-slave") {
    build()
    push_artifact()
    }
-      
+}    
