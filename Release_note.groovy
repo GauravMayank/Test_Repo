@@ -151,6 +151,7 @@ exit 0
   }
 }
 node("dev-mini-housing-jenkins-slave") {
-      release_job()
+   git_clone()   
+   release_job()
       }
       
