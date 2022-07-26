@@ -38,6 +38,7 @@ VERSIONTYPE="patch"
 
 # Get top-level of git repo.
 REPO_DIR=$(echo $(git rev-parse --show-toplevel))
+echo "${REPO_DIR}"
 # CD into the top level
 cd "${REPO_DIR}"
 
@@ -47,6 +48,7 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ $CURRENT_BRANCH != "$BRANCH" ]; then
     echo "- Switching from $CURRENT_BRANCH to $BRANCH branch. (stashing any local change)"
     # stash any current work
+    echo "${GITPARAMS[@]}"
     git stash "${GITPARAMS[@]}"
     # go to the production branch
     git checkout $BRANCH "${GITPARAMS[@]}"
