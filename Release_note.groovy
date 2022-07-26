@@ -254,7 +254,7 @@ exit 0
     throw new hudson.AbortException("Some issue with build")
   }
 }
-node("dev-mini-housing-jenkins-slave")
+node("dev-mini-housing-jenkins-slave"){
 stage('app clone repo'){
    if("${env.BRANCH_NAME}" == "master"){
    env.newtag="${TAG}"
@@ -264,4 +264,7 @@ stage('app clone repo'){
    build()
    push_artifact()
    }
-}    
+ }
+}
+   
+   
