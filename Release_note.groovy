@@ -154,7 +154,7 @@ node("dev-mini-housing-jenkins-slave") {
    if("${env.BRANCH_NAME}" == "master"){
    env.newtag="${TAG}"
    echo "${newtag}"
-   env.imagetag="628119511333.dkr.ecr.ap-southeast-1.amazonaws.com/housing/${repo}:${TAG}"
+   //env.imagetag="628119511333.dkr.ecr.ap-southeast-1.amazonaws.com/housing/${repo}:${TAG}"
    git_clone()
    build()
    push_artifact()
