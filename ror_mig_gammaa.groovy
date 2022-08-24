@@ -21,7 +21,7 @@ def git_clone() {
 def build() {
   stage name: 'build docker', concurrency: 5
   try {
-     sh "docker build -t ${APP_NAME}:${build_id} -f ${Dockerfile} ."
+     sh "docker build -t ${APP_NAME}:${build_id} -f ${Dockerfile}"
      println "++++++++++++++++++docker build done+++++++++++++"
     sh "docker tag  ${APP_NAME}:${build_id}  ${imagetag}"
      return "done"
